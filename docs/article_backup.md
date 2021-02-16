@@ -5,7 +5,7 @@ Step by step tutorial on how to create Typescript deep merge generic type which 
 Source code for DeepMergeTwoTypes generic is at bottom of the article.
 You can copy-paste it into your IDE and play with it.
 
-[you can play with the code here](https://www.typescriptlang.org/play?target=1#code/LAKALgngDgpgBACRgQwCYB4AqA+OBeOTOGADzBgDtUBnOAbQEsKAzGAJzgEkAaOAOgFNWHAPoAlGNTABdOAH4ucAFxwKMAG7tQkWIWQMANllwEipclVqMW7OCJ79BNjhKmyFrsMtUatIbdDwAFoMUCIAIjAwUACy7ADmMJgA7gD2mIHUWLwAqiaExGSUNPTSoHDycDnl3jmFFiV0ZSAVCpg1KnQ1FRWR0XFsiSnpmehIaMa84xh52NzdPQJ8IWF9sQlJaRmwWZj6Rji8e4boszXNoKAA9ABUN+U3egDW8GBpcKkARgBWMADGYFoRGQVCqcBBqDgfzYKHIcDAAAt4Gpkh81HBkgxEXAAK4UBgARzgLwgtGYqQ4wLBX1+AM4DzgSIMsA4iTUbAYfzg5I4AAM1gMhltMryHlcAroAOIwMAAeR+4QYzGElDAAGkYKT0DVMPMWlU9RVMAAGfBwWUAWyx2WJmtSzCquAAZOarWBTrwSfbCHMdQBGM0Ab3oargTFtEG9JukKhNdDVsgAvuV8pg-dc7gy9i94e8af9AQUIWDi9DYa8kT5Ual0ZjsYj4NRkBb4PmAbQSdQGUyWXA2exOdyKXB+VF1oNNiMdqKWjdxeBAnBpXKfgBlZswDVa3WOs2W61EAA+Boj3uX8u+iuV7FVW92uWw2EuC90gsnF4LWR1hpPNSuV1UGs4GoBFkBhSFO3BGEPigMAGBrZADB1U0CAABTAuDEPQc8FSVFUKHVTV70dJ99X-YDQPAiNaDA+AYT+HE2GoBhNAMCA4BhahUgMTRIU+djR36DZhm2SR0CWbAZwqF1A3jMMKFPB0cO+dcWzvG08hjOABWE4UdiweNpFyQzsETH80yDEN5MUwhjS0uMEzgZMQFTdN-BAcisTgFsJzgAAmYCwGQOCuR0SRwVBMA2HYsBUnBdRUgYSFvTxNQ-kkJtopguCa1oAAKXkAHJeQASlAUgoApLwwu0sc3xE0YdzyfA-wAgBaDqOv88FUFQGBIQMJhws6zrWvhBEGFoQb0UAG+IajoJrZHMYorBBCAml4NammaHo4HIpYIshRFJrgab4Dm-VWjgFYIjq3SpzEprSN28i-iRP4njDB1+w5ULMig1sfk-BZOkW+oVvoYM6BJFQpA5Ch4i0vEngoVJkgoMy4ChmHAvhxGVGR1H0acuAdt2yp6rSD92w057ydjOBj2qdzrnakb2ba+FJC8P5kGoYaOcF58arfVBqcLAhKdScWskDGpyVSToFmDEgVEK5BCt4CA1c+QqzPOGpPjAlQ5cuuAjbYERkDVjWfwqC2RE+HXNYWB2-hNhYKj+d2sahb2TbgEgRG9-24EKkhNb90PCuDkPCpJ5zdsTnoHdQD2zYqXq1d6wqFn1-V8-t5AAC9OlN3anax5PE2afPy6HRX6GV8EbcjyvCt1wuemDbWw9twPVbDzu7d9n31bb52u7Ji304rsCrdn8nQ4oHELU+dgR8z7Pc7Nrui8tyuV4MAwR7dgPPb9gOQ6vkOx4AFhIP548TEm85qLujdLyHXcX3brb7neSd3611Is+CU8AAAaZpRYyyA)
+[you can play with the code here](https://www.typescriptlang.org/play?target=1#code/LAKALgngDgpgBACRgQwCYB4AqA+OBeOTOGADzBgDtUBnOAbQEsKAzGAJzgEkAaOAOgFNWHAPoAlGNTABdOAH4ucAFxwKMAG7tQkWIWQMANllwEipclVqMW7OCJ79BNjhKmyFrsMtUatIbdDwAFoMUCIAIjAwUACy7ADmMJgA7gD2mIHUWLwAqiaExGSUNPTSoHDycDnl3jmFFiV0ZSAVCpg1KnQ1FRWR0XFsiSnpmehIaMa84xh52NzdPQJ8IWF9sQlJaRmwWZj6Rji8e4boszXNoKAA9ABUN+U3egDW8GBpcKkARgBWMADGYFoRGQVCqcBBqDgfzYKHIcDAAAt4Gpkh81HBkgxEXAAK4UBgARzgLwgtGYqQ4wLBX1+AM4DzgSIMsA4iTUbAYfzg5I4AAM1gMhltMryHlcAroAOIwMAAeR+4QYzGElDAAGkYKT0DVMPMWlU9RVMAAGfBwWUAWyx2WJmtSzCquAAZOarWBTrwSfbCHMdQBGM0Ab3oargTFtEG9JukKhNdDVsgAvuV8pg-dc7gy9i94e8af9AQUIWDi9DYa8kT5Ual0ZjsYj4NRkBb4PmAbQSdQGUyWXA2exOdyKXB+VF1oNNiMdqKWjdxeBAnBpXKfgBlZswDVa3WOs2W61EAA+Boj3uX8u+iuV7FVW92uWw2EuC90gsnF4LWR1hpPNSuV1UGs4GoBFkBhSFO3BGEPigMAGBrZADB1U0CAABTAuDEPQc8FSVFUKHVTV70dJ99X-YDQPAiNaDA+AYT+HE2GoBhNAMCA4BhahUgMTRIU+djR36DZhm2SR0CWbAZwqF1A3jMMKFPB0cO+dcWzvG08hjOABWE4UdiweNpFyQzsETH80yDEN5MUwhjS0uMEzgZMQFTdN-BAcisTgFsJzgAAmYCwGQOCuR0SRwVBMA2HYsBUnBdRUgYSFvTxNQ-kkJtopguCa1oAAKXkAHJeQASlAUgoApLwwu0sc3xE0YdzyfA-wAgBaDqOv88FUFQGBIQMJhws6zqajoJrZHMYorBBCAml4WammaHpKhWCI6t0qcxKa0iVvIv4kT+J4wwdfsOVCzIoNbH5PwWToJvqab6GDOgSRUKQOQoeItLxJ4KFSZIKDMuAXrewLPu+lRfv+wGnLgZaVsqeq0g-dsNN2xHYzgY9qnc652pGwm2vhSQvD+ZBqGGonqefGq31QVHCwIZHUkZrJAxqclUk6BZgxIFRCuQQreAgAXPkKszzhqT4wJUDn9QqGW2BEZABaFn9FbAkRPjF4WFiVkQ-jlhYKj+I2QahM25bgEhDbN83CpIYXLatuBCrts3Crh5yVp9noDdQY2FZ6XqBd6wqFkl-Uo81gAvTp5ZWnWQb9xNmijxOh25+hefBNXneTwrxZjnpg1Ft31Zt-m3eLjWLYdyvC9rqX9SVoOk611WQZNy2VAoHELU+dg64qQO3dQCPg5LzXleT-uDAMOuDfN4Me9d4N7et+3XcKgAWEg-i9xM4cjmoS5l+Pnv19vEa7wXJ99s-09I58JXgAANM16bZoA)
 
 [Or check the GitHub repo https://github.com/Svehla/TS_DeepMerge](https://github.com/Svehla/TS_DeepMerge)
 
@@ -225,7 +225,7 @@ type T0 = Tail<['x', 'y', 'z']>
 
 ![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hpstzq6qaldggcql5q1v.png)
 
-That is all we need to final implementation of array merging Generic, so let's hack it!
+That is all we need for the final implementation of arrays merging Generic, so let's hack it!
 
 ### `Zip_DeepMergeTwoTypes<T, U>`
 
@@ -263,13 +263,13 @@ Now we'll just write 2 lines long integration in the `DeepMergeTwoTypes<T, U>` G
 ```typescript
 export type DeepMergeTwoTypes<T, U> =
   // ----- 2 added lines ------
-  // > this line ⏬
+  // this line ⏬
   [T, U] extends [any[], any[]]
-    // > and this line ⏬
-    ? AggregateArray<T, U>
+    // ... and this line ⏬
+    ? Zip_DeepMergeTwoTypes<T, U>
     // check if generic types are objects
     : [T, U] extends [{ [key: string]: unknown}, { [key: string]: unknown } ]
-      ? Zip_DeepMergeTwoTypes<T, U>
+      ? MergeTwoObjects<T, U>
       : T | U
 ```
 --------------------------------------------------
@@ -294,7 +294,6 @@ type MergedAB = DeepMergeTwoTypes<A, B>
 ## Full source code
 
 ```typescript
-
 type Head<T> = T extends [infer I, ...infer _Rest] ? I : never
 type Tail<T> = T extends [infer _I, ...infer Rest] ? Rest : never
 
@@ -337,23 +336,30 @@ type MergeTwoObjects<
 // it merge 2 static types and try to avoid of unnecessary options (`'`)
 export type DeepMergeTwoTypes<T, U> =
   // ----- 2 added lines ------
-  // this line ⏬
   [T, U] extends [any[], any[]]
-    // ... and this line ⏬
     ? Zip_DeepMergeTwoTypes<T, U>
     // check if generic types are objects
     : [T, U] extends [{ [key: string]: unknown}, { [key: string]: unknown } ]
       ? MergeTwoObjects<T, U>
       : T | U
 
-
 ```
 
-[you can play with the code here](https://www.typescriptlang.org/play?target=1#code/LAKALgngDgpgBACRgQwCYB4AqA+OBeOTOGADzBgDtUBnOAbQEsKAzGAJzgEkAaOAOgFNWHAPoAlGNTABdOAH4ucAFxwKMAG7tQkWIWQMANllwEipclVqMW7OCJ79BNjhKmyFrsMtUatIbdDwAFoMUCIAIjAwUACy7ADmMJgA7gD2mIHUWLwAqiaExGSUNPTSoHDycDnl3jmFFiV0ZSAVCpg1KnQ1FRWR0XFsiSnpmehIaMa84xh52NzdPQJ8IWF9sQlJaRmwWZj6Rji8e4boszXNoKAA9ABUN+U3egDW8GBpcKkARgBWMADGYFoRGQVCqcBBqDgfzYKHIcDAAAt4Gpkh81HBkgxEXAAK4UBgARzgLwgtGYqQ4wLBX1+AM4DzgSIMsA4iTUbAYfzg5I4AAM1gMhltMryHlcAroAOIwMAAeR+4QYzGElDAAGkYKT0DVMPMWlU9RVMAAGfBwWUAWyx2WJmtSzCquAAZOarWBTrwSfbCHMdQBGM0Ab3oargTFtEG9JukKhNdDVsgAvuV8pg-dc7gy9i94e8af9AQUIWDi9DYa8kT5Ual0ZjsYj4NRkBb4PmAbQSdQGUyWXA2exOdyKXB+VF1oNNiMdqKWjdxeBAnBpXKfgBlZswDVa3WOs2W61EAA+Boj3uX8u+iuV7FVW92uWw2EuC90gsnF4LWR1hpPNSuV1UGs4GoBFkBhSFO3BGEPigMAGBrZADB1U0CAABTAuDEPQc8FSVFUKHVTV70dJ99X-YDQPAiNaDA+AYT+HE2GoBhNAMCA4BhahUgMTRIU+djR36DZhm2SR0CWbAZwqF1A3jMMKFPB0cO+dcWzvG08hjOABWE4UdiweNpFyQzsETH80yDEN5MUwhjS0uMEzgZMQFTdN-BAcisTgFsJzgAAmYCwGQOCuR0SRwVBMA2HYsBUnBdRUgYSFvTxNQ-kkJtopguCa1oAAKXkAHJeQASlAUgoApLwwu0sc3xE0YdzyfA-wAgBaDqOv88FUFQGBIQMJhws6zrWvhBEGFoQb0UAG+IajoJrZHMYorBBCAml4NammaHo4HIpYIshRFJrgab4Dm-VWjgFYIjq3SpzEprSN28i-iRP4njDB1+w5ULMig1sfk-BZOkW+oVvoYM6BJFQpA5Ch4i0vEngoVJkgoMy4ChmHAvhxGVGR1H0acuAdt2yp6rSD92w057ydjOBj2qdzrnakb2ba+FJC8P5kGoYaOcF58arfVBqcLAhKdScWskDGpyVSToFmDEgVEK5BCt4CA1c+QqzPOGpPjAlQ5cuuAjbYERkDVjWfwqC2RE+HXNYWB2-hNhYKj+d2sahb2TbgEgRG9-24EKkhNb90PCuDkPCpJ5zdsTnoHdQD2zYqXq1d6wqFn1-V8-t5AAC9OlN3anax5PE2afPy6HRX6GV8EbcjyvCt1wuemDbWw9twPVbDzu7d9n31bb52u7Ji304rsCrdn8nQ4oHELU+dgR8z7Pc7Nrui8tyuV4MAwR7dgPPb9gOQ6vkOx4AFhIP548TEm85qLujdLyHXcX3brb7neSd3611Is+CU8AAAaZpRYyyAA)
+[you can play with the code here](https://www.typescriptlang.org/play?target=1#code/LAKALgngDgpgBACRgQwCYB4AqA+OBeOTOGADzBgDtUBnOAbQEsKAzGAJzgEkAaOAOgFNWHAPoAlGNTABdOAH4ucAFxwKMAG7tQkWIWQMANllwEipclVqMW7OCJ79BNjhKmyFrsMtUatIbdDwAFoMUCIAIjAwUACy7ADmMJgA7gD2mIHUWLwAqiaExGSUNPTSoHDycDnl3jmFFiV0ZSAVCpg1KnQ1FRWR0XFsiSnpmehIaMa84xh52NzdPQJ8IWF9sQlJaRmwWZj6Rji8e4boszXNoKAA9ABUN+U3egDW8GBpcKkARgBWMADGYFoRGQVCqcBBqDgfzYKHIcDAAAt4Gpkh81HBkgxEXAAK4UBgARzgLwgtGYqQ4wLBX1+AM4DzgSIMsA4iTUbAYfzg5I4AAM1gMhltMryHlcAroAOIwMAAeR+4QYzGElDAAGkYKT0DVMPMWlU9RVMAAGfBwWUAWyx2WJmtSzCquAAZOarWBTrwSfbCHMdQBGM0Ab3oargTFtEG9JukKhNdDVsgAvuV8pg-dc7gy9i94e8af9AQUIWDi9DYa8kT5Ual0ZjsYj4NRkBb4PmAbQSdQGUyWXA2exOdyKXB+VF1oNNiMdqKWjdxeBAnBpXKfgBlZswDVa3WOs2W61EAA+Boj3uX8u+iuV7FVW92uWw2EuC90gsnF4LWR1hpPNSuV1UGs4GoBFkBhSFO3BGEPigMAGBrZADB1U0CAABTAuDEPQc8FSVFUKHVTV70dJ99X-YDQPAiNaDA+AYT+HE2GoBhNAMCA4BhahUgMTRIU+djR36DZhm2SR0CWbAZwqF1A3jMMKFPB0cO+dcWzvG08hjOABWE4UdiweNpFyQzsETH80yDEN5MUwhjS0uMEzgZMQFTdN-BAcisTgFsJzgAAmYCwGQOCuR0SRwVBMA2HYsBUnBdRUgYSFvTxNQ-kkJtopguCa1oAAKXkAHJeQASlAUgoApLwwu0sc3xE0YdzyfA-wAgBaDqOv88FUFQGBIQMJhws6zqajoJrZHMYorBBCAml4WammaHpKhWCI6t0qcxKa0iVvIv4kT+J4wwdfsOVCzIoNbH5PwWToJvqab6GDOgSRUKQOQoeItLxJ4KFSZIKDMuAXrewLPu+lRfv+wGnLgZaVsqeq0g-dsNN2xHYzgY9qnc652pGwm2vhSQvD+ZBqGGonqefGq31QVHCwIZHUkZrJAxqclUk6BZgxIFRCuQQreAgAXPkKszzhqT4wJUDn9QqGW2BEZABaFn9FbAkRPjF4WFiVkQ-jlhYKj+I2QahM25bgEhDbN83CpIYXLatuBCrts3Crh5yVp9noDdQY2FZ6XqBd6wqFkl-Uo81gAvTp5ZWnWQb9xNmijxOh25+hefBNXneTwrxZjnpg1Ft31Zt-m3eLjWLYdyvC9rqX9SVoOk611WQZNy2VAoHELU+dg64qQO3dQCPg5LzXleT-uDAMOuDfN4Me9d4N7et+3XcKgAWEg-i9xM4cjmoS5l+Pnv19vEa7wXJ99s-09I58JXgAANM16bZoA)
 
 [Or check the GitHub repo https://github.com/Svehla/TS_DeepMerge](https://github.com/Svehla/TS_DeepMerge)
 
 
+
+
+## And what's next?
+
+If you're interested in another advanced usage of the Typescript type system, you can check these step-by-step articles/tutorials on how to create some advanced Typescript generics.
+
+- [World-first Static time RegEx engine with O(0) time complexity](https://dev.to/svehla/world-first-static-time-regex-engine-with-o-0-time-complexity-4k4e)
+- [How to Object.fromEntries tuples](https://dev.to/svehla/typescript-object-fromentries-389c)
+- [UPPER_CASE to lowerCase transformator](https://dev.to/svehla/typescript-transform-case-strings-450b)
+- [and so on](https://dev.to/svehla)
 
 
 
