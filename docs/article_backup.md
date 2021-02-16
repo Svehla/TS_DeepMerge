@@ -7,8 +7,7 @@ You can copy-paste it into your IDE and play with it.
 
 [you can play with the code here](https://www.typescriptlang.org/play?target=1#code/LAKALgngDgpgBACRgQwCYB4AqA+OBeOTOGADzBgDtUBnOAbQEsKAzGAJzgEkAaOAOgFNWHAPoAlGNTABdOAH4ucAFxwKMAG7tQkWIWQMANllwEipclVqMW7OCJ79BNjhKmyFrsMtUatIbdDwAFoMUCIAIjAwUACy7ADmMJgA7gD2mIHUWLwAqiaExGSUNPTSoHDycDnl3jmFFiV0ZSAVCpg1KnQ1FRWR0XFsiSnpmehIaMa84xh52NzdPQJ8IWF9sQlJaRmwWZj6Rji8e4boszXNoKAA9ABUN+U3egDW8GBpcKkARgBWMADGYFoRGQVCqcBBqDgfzYKHIcDAAAt4Gpkh81HBkgxEXAAK4UBgARzgLwgtGYqQ4wLBX1+AM4DzgSIMsA4iTUbAYfzg5I4AAM1gMhltMryHlcAroAOIwMAAeR+4QYzGElDAAGkYKT0DVMPMWlU9RVMAAGfBwWUAWyx2WJmtSzCquAAZOarWBTrwSfbCHMdQBGM0Ab3oargTFtEG9JukKhNdDVsgAvuV8pg-dc7gy9i94e8af9AQUIWDi9DYa8kT5Ual0ZjsYj4NRkBb4PmAbQSdQGUyWXA2exOdyKXB+VF1oNNiMdqKWjdxeBAnBpXKfgBlZswDVa3WOs2W61EAA+Boj3uX8u+iuV7FVW92uWw2EuC90gsnF4LWR1hpPNSuV1UGs4GoBFkBhSFO3BGEPigMAGBrZADB1U0CAABTAuDEPQc8FSVFUKHVTV70dJ99X-YDQPAiNaDA+AYT+HE2GoBhNAMCA4BhahUgMTRIU+djR36DZhm2SR0CWbAZwqF1A3jMMKFPB0cO+dcWzvG08hjOABWE4UdiweNpFyQzsETH80yDEN5MUwhjS0uMEzgZMQFTdN-BAcisTgFsJzgAAmYCwGQOCuR0SRwVBMA2HYsBUnBdRUgYSFvTxNQ-kkJtopguCa1oAAKXkAHJeQASlAUgoApLwwu0sc3xE0YdzyfA-wAgBaDqOv88FUFQGBIQMJhws6zrWvhBEGFoQb0UAG+IajoJrZHMYorBBCAml4NammaHo4HIpYIshRFJrgab4Dm-VWjgFYIjq3SpzEprSN28i-iRP4njDB1+w5ULMig1sfk-BZOkW+oVvoYM6BJFQpA5Ch4i0vEngoVJkgoMy4ChmHAvhxGVGR1H0acuAdt2yp6rSD92w057ydjOBj2qdzrnakb2ba+FJC8P5kGoYaOcF58arfVBqcLAhKdScWskDGpyVSToFmDEgVEK5BCt4CA1c+QqzPOGpPjAlQ5cuuAjbYERkDVjWfwqC2RE+HXNYWB2-hNhYKj+d2sahb2TbgEgRG9-24EKkhNb90PCuDkPCpJ5zdsTnoHdQD2zYqXq1d6wqFn1-V8-t5AAC9OlN3anax5PE2afPy6HRX6GV8EbcjyvCt1wuemDbWw9twPVbDzu7d9n31bb52u7Ji304rsCrdn8nQ4oHELU+dgR8z7Pc7Nrui8tyuV4MAwR7dgPPb9gOQ6vkOx4AFhIP548TEm85qLujdLyHXcX3brb7neSd3611Is+CU8AAAaZpRYyyA)
 
-
-VS-CODE preview
+[Or check the GitHub repo https://github.com/Svehla/TS_DeepMerge](https://github.com/Svehla/TS_DeepMerge)
 
 ```typescript
 type A = { key1: { a: { b: 'c' } }, key2: undefined }
@@ -193,82 +192,19 @@ type MergedAB = DeepMergeTwoTypes<A, B>
 
 Unfortunately not… Our new generic does not support Arrays.
 
-before we will continue we have to know the keyword `infer`
+## Add arrays support
+
+Before we will continue we have to know the keyword `infer`.
 
 `infer` look for data structure and extract data type which is wrapped inside of them (in our case it extract data type of array) You can read more about `infer` functionality there:
 https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#type-inference-in-conditional-types
 
-Example usage of infer keyword on example how to get `Item` type out of `Item[]`:
-```typescript
-export type ArrayElement<A> = A extends (infer T)[] ? T : never
+### Let's define another helper generics!
 
-type Item = ArrayElement<(number | string)[]>
-```
-
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/zixrxc9bc4xu6ml5vdc2.png)
-
-
-
-Now we have to add proper support for Arrays just by simple 2 lines where we infer values of the elements of the array and recursively call `DeepMergeTwoTypes` for arrays items.
-
-
-```typescript
-export type DeepMergeTwoTypes<T, U> =
-  // ----- 2 added lines ------
-  // this line ⏬
-  [T, U] extends [(infer TItem)[], (infer UItem)[]]
-    // ... and this line ⏬
-    ? DeepMergeTwoTypes<TItem, UItem>[]
-    // check if generic types are objects
-    : [T, U] extends [{ [key: string]: unknown}, { [key: string]: unknown } ]
-      ? MergeTwoObjects<T, U>
-      : T | U.
-```
-
-Now the DeepMergeTwoTypes can recursively call yourself if values are objects or arrays.
-
-```typescript
-type A = [{ key1: string, key2: string }]
-type B = [{ key2: null, key3: string }]
-
-type MergedAB = DeepMergeTwoTypes<A, B>
-```
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ynif2bbbeu1n64q6lkd9.png)
-
-It works perfectly! 🎉
-
---------------
-
-Till you pass more items into these arrays. 🤦‍♂️
- 
-Let's try to test structure like this one:
-
-```typescript
-type MergedObjects = MergeTwoObjects<{
-  foo: [
-    { a: 'a', b: 'b'},
-    { y: 'a', xx: 'b'},
-    { c: 'a', b: 'b'},
-  ]
-},
-{
- foo: [
-    { x: 'a', y: 'b'},
-  ]
-}>
-```
-
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/1wjka38dcdrqxe9rrk2c.png)
-
-Ups, whole algorithm is broken because `(infer)[]`  returns union of all Iteams, which is not valid input into`DeepMergeTwoTypes<...>` algorithm. 
-
-So we need to iterate over the array and `Zip` items with `DeepMergeTwoTypes<...>`.
-
-### But first, let's define another util generics!
 
 #### `Head<T>`
 
-This generic takes an array and returns the first item.
+`Head` This generic takes an array and returns the first item.
 
 ```typescript
 type Head<T> = T extends [infer I, ...infer _Rest] ? I : never
@@ -289,14 +225,13 @@ type T0 = Tail<['x', 'y', 'z']>
 
 ![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hpstzq6qaldggcql5q1v.png)
 
-This is our toolbelt to do the DeepMergeZip function!
+That is all we need to final implementation of array merging Generic, so let's hack it!
 
-### Now let's zip two arrays and combine items together
+### `Zip_DeepMergeTwoTypes<T, U>`
 
-AggregateArray is simple recursive generic which zip two arrays and combine their items based on array index value.
+`Zip_DeepMergeTwoTypes` is a simple recursive generic which zip two arrays into one by combining their items based on the item index position.
 
 ```typescript
-
 type Head<T> = T extends [infer I, ...infer _Rest] ? I : never
 type Tail<T> = T extends [infer _I, ...infer Rest] ? Rest : never
 
@@ -323,15 +258,14 @@ type T0 = Zip_DeepMergeTwoTypes<
 
 ![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/06g9g7jhmc2v78vbxu4i.png)
 
-
-With this perfect array zip aggregator I'm able to add last two lines into DeepMergeTypes
+Now we'll just write 2 lines long integration in the `DeepMergeTwoTypes<T, U>` Generic which provides zipping values thanks to `Zip_DeepMergeTwoTypes` Generic.
 
 ```typescript
 export type DeepMergeTwoTypes<T, U> =
   // ----- 2 added lines ------
-  // this line ⏬
+  // > this line ⏬
   [T, U] extends [any[], any[]]
-    // ... and this line ⏬
+    // > and this line ⏬
     ? AggregateArray<T, U>
     // check if generic types are objects
     : [T, U] extends [{ [key: string]: unknown}, { [key: string]: unknown } ]
@@ -342,7 +276,7 @@ export type DeepMergeTwoTypes<T, U> =
 
 ## And…. That’s all!!! 🎉
 
-We did it and values are correctly merged even for nullable values, nested objects, and arrays.
+We did it! Values are correctly merged even for nullable values, nested objects, and long arrays.
 
 Let’s try it on some more complex data
 
@@ -360,6 +294,19 @@ type MergedAB = DeepMergeTwoTypes<A, B>
 ## Full source code
 
 ```typescript
+
+type Head<T> = T extends [infer I, ...infer _Rest] ? I : never
+type Tail<T> = T extends [infer _I, ...infer Rest] ? Rest : never
+
+type Zip_DeepMergeTwoTypes<T, U> = T extends []
+  ? U
+  : U extends []
+  ? T
+  : [
+      DeepMergeTwoTypes<Head<T>, Head<U>>,
+      ...Zip_DeepMergeTwoTypes<Tail<T>, Tail<U>>
+  ]
+
 
 /**
  * Take two objects T and U and create the new one with uniq keys for T a U objectI
@@ -389,9 +336,11 @@ type MergeTwoObjects<
 
 // it merge 2 static types and try to avoid of unnecessary options (`'`)
 export type DeepMergeTwoTypes<T, U> =
-  // check if generic types are arrays and unwrap it and do the recursion
-  [T, U] extends [(infer TItem)[], (infer UItem)[]]
-    ? DeepMergeTwoTypes<TItem, UItem>[]
+  // ----- 2 added lines ------
+  // this line ⏬
+  [T, U] extends [any[], any[]]
+    // ... and this line ⏬
+    ? Zip_DeepMergeTwoTypes<T, U>
     // check if generic types are objects
     : [T, U] extends [{ [key: string]: unknown}, { [key: string]: unknown } ]
       ? MergeTwoObjects<T, U>
@@ -401,6 +350,8 @@ export type DeepMergeTwoTypes<T, U> =
 ```
 
 [you can play with the code here](https://www.typescriptlang.org/play?target=1#code/LAKALgngDgpgBACRgQwCYB4AqA+OBeOTOGADzBgDtUBnOAbQEsKAzGAJzgEkAaOAOgFNWHAPoAlGNTABdOAH4ucAFxwKMAG7tQkWIWQMANllwEipclVqMW7OCJ79BNjhKmyFrsMtUatIbdDwAFoMUCIAIjAwUACy7ADmMJgA7gD2mIHUWLwAqiaExGSUNPTSoHDycDnl3jmFFiV0ZSAVCpg1KnQ1FRWR0XFsiSnpmehIaMa84xh52NzdPQJ8IWF9sQlJaRmwWZj6Rji8e4boszXNoKAA9ABUN+U3egDW8GBpcKkARgBWMADGYFoRGQVCqcBBqDgfzYKHIcDAAAt4Gpkh81HBkgxEXAAK4UBgARzgLwgtGYqQ4wLBX1+AM4DzgSIMsA4iTUbAYfzg5I4AAM1gMhltMryHlcAroAOIwMAAeR+4QYzGElDAAGkYKT0DVMPMWlU9RVMAAGfBwWUAWyx2WJmtSzCquAAZOarWBTrwSfbCHMdQBGM0Ab3oargTFtEG9JukKhNdDVsgAvuV8pg-dc7gy9i94e8af9AQUIWDi9DYa8kT5Ual0ZjsYj4NRkBb4PmAbQSdQGUyWXA2exOdyKXB+VF1oNNiMdqKWjdxeBAnBpXKfgBlZswDVa3WOs2W61EAA+Boj3uX8u+iuV7FVW92uWw2EuC90gsnF4LWR1hpPNSuV1UGs4GoBFkBhSFO3BGEPigMAGBrZADB1U0CAABTAuDEPQc8FSVFUKHVTV70dJ99X-YDQPAiNaDA+AYT+HE2GoBhNAMCA4BhahUgMTRIU+djR36DZhm2SR0CWbAZwqF1A3jMMKFPB0cO+dcWzvG08hjOABWE4UdiweNpFyQzsETH80yDEN5MUwhjS0uMEzgZMQFTdN-BAcisTgFsJzgAAmYCwGQOCuR0SRwVBMA2HYsBUnBdRUgYSFvTxNQ-kkJtopguCa1oAAKXkAHJeQASlAUgoApLwwu0sc3xE0YdzyfA-wAgBaDqOv88FUFQGBIQMJhws6zrWvhBEGFoQb0UAG+IajoJrZHMYorBBCAml4NammaHo4HIpYIshRFJrgab4Dm-VWjgFYIjq3SpzEprSN28i-iRP4njDB1+w5ULMig1sfk-BZOkW+oVvoYM6BJFQpA5Ch4i0vEngoVJkgoMy4ChmHAvhxGVGR1H0acuAdt2yp6rSD92w057ydjOBj2qdzrnakb2ba+FJC8P5kGoYaOcF58arfVBqcLAhKdScWskDGpyVSToFmDEgVEK5BCt4CA1c+QqzPOGpPjAlQ5cuuAjbYERkDVjWfwqC2RE+HXNYWB2-hNhYKj+d2sahb2TbgEgRG9-24EKkhNb90PCuDkPCpJ5zdsTnoHdQD2zYqXq1d6wqFn1-V8-t5AAC9OlN3anax5PE2afPy6HRX6GV8EbcjyvCt1wuemDbWw9twPVbDzu7d9n31bb52u7Ji304rsCrdn8nQ4oHELU+dgR8z7Pc7Nrui8tyuV4MAwR7dgPPb9gOQ6vkOx4AFhIP548TEm85qLujdLyHXcX3brb7neSd3611Is+CU8AAAaZpRYyyAA)
+
+[Or check the GitHub repo https://github.com/Svehla/TS_DeepMerge](https://github.com/Svehla/TS_DeepMerge)
 
 
 
