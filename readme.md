@@ -15,7 +15,7 @@ type B = { key1: { a: {} }, key3: string }
 type MergedAB = DeepMergeTwoTypes<A, B>
 ```
 
-![deep merge preview](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/deep_merge_preview.png)
+![deep merge preview](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/deep_merge_preview.png)
 
 ## Prerequisite
 If you want to deep dive into advanced typescript types I recommend this typescript series full of useful examples.
@@ -35,7 +35,7 @@ type B = { key1: string, key3: string }
 type MergedAB = (A & B)['key1']
 ```
 
-![Ts native merge](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/ts_native_merge.png)
+![Ts native merge](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/ts_native_merge.png)
 
 Everything looks good until you start to merge inconsistent data types. 
 
@@ -48,7 +48,7 @@ type MergedAB = (A & B)
 
 As you can see type `A` define `key2` as a string but type `B` define `key2` as a `null` value.
 
-![Ts native merge 2](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/ts_native_merge_2.png)
+![Ts native merge 2](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/ts_native_merge_2.png)
 
 
 Typescript resolves this inconsistent type merging as type `never` and type `MergedAB` stops to work at all. Our expected output should be something like this
@@ -90,7 +90,7 @@ type B = { key2: null, key3: string }
 type DifferentKeysAB = (GetObjDifferentKeys<A, B>)['k']
 ```
 
-![different keys](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/different_keys_ab.png)
+![different keys](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/different_keys_ab.png)
 
 
 
@@ -110,7 +110,7 @@ type B = { key2: null, key3: string }
 type SameKeys = GetObjSameKeys<A, B>
 ```
 
-![Same keys](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/same_keys.png)
+![Same keys](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/same_keys.png)
 
 
 
@@ -144,7 +144,7 @@ type B = { key2: null, key3: string }
 type MergedAB = DeepMergeTwoTypes<A, B>
 ```
 
-![deep merge two types](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/deep_merge_two_types.png)
+![deep merge two types](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/deep_merge_two_types.png)
 
 
 But our current `DeepMergeTwoTypes` generic does not work recursively to the nested structures types. So let’s extract Object merging functionality into a new generic called `MergeTwoObjects` and let `DeepMergeTwoTypes` call recursively until it merges all nested structures.
@@ -186,7 +186,7 @@ type B = { key: { a: string, b: string} }
 type MergedAB = DeepMergeTwoTypes<A, B>
 ```
 
-![deep merge two types 2](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/deep_merge_two_types_2.png)
+![deep merge two types 2](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/deep_merge_two_types_2.png)
 
 *Is that all?*
 
@@ -212,7 +212,7 @@ type Head<T> = T extends [infer I, ...infer _Rest] ? I : never
 type T0 = Head<['x', 'y', 'z']>
 ```
 
-![Head array](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/head_array.png)
+![Head array](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/head_array.png)
 
 #### `Tail<T>`
 This generic takes an array and returns all items exclude the first one.
@@ -223,7 +223,7 @@ type Tail<T> = T extends [infer _I, ...infer Rest] ? Rest : never
 type T0 = Tail<['x', 'y', 'z']>
 ```
 
-![tail array](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/tail_array.png)
+![tail array](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/tail_array.png)
 
 That is all we need for the final implementation of arrays merging Generic, so let's hack it!
 
@@ -256,7 +256,7 @@ type T0 = Zip_DeepMergeTwoTypes<
 
 ```
 
-![zip deep merge two types](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/zip_deep_merge_two_types.png)
+![zip deep merge two types](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/zip_deep_merge_two_types.png)
 
 Now we'll just write 2 lines long integration in the `DeepMergeTwoTypes<T, U>` Generic which provides zipping values thanks to `Zip_DeepMergeTwoTypes` Generic.
 
@@ -287,7 +287,7 @@ type B = { key1: { a: {} }, key3: string }
           
 type MergedAB = DeepMergeTwoTypes<A, B>
 ```
-![deep merge preview](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/main/imgs/deep_merge_preview.png)
+![deep merge preview](https://raw.githubusercontent.com/Svehla/TS_DeepMerge/master/imgs/deep_merge_preview.png)
 
 
 
